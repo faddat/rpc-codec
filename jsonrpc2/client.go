@@ -130,6 +130,12 @@ func (r *clientResponse) UnmarshalJSON(raw []byte) error {
 	if err := json.Unmarshal(raw, &o); err != nil {
 		return errors.New("bad response: " + string(raw))
 	}
+
+	// THE HACK
+	rawVersion := json.RawMessage([]byte("2.0"))
+	o["jsonrpc"] = &rawVersion
+	r.Version = "2.0"
+
 	_, okVer := o["jsonrpc"]
 	_, okID := o["id"]
 	_, okRes := o["result"]
